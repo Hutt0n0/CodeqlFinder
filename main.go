@@ -3,7 +3,7 @@
  * @version:
  * @Author: Hutt0n0
  * @Date: 2023-01-25 14:52:46
- * @LastEditTime: 2023-04-27 19:21:29
+ * @LastEditTime: 2023-05-08 14:07:40
  */
 package main
 
@@ -62,7 +62,7 @@ func main() {
 		checkMvn := utils.CheckMaven()
 		CheckQLPATH := utils.CheckQLPATH(database, qlpath)
 		if !checkCodeqlEnv || !checkdatabase || !checkMvn || !CheckQLPATH {
-			log.Fatalln("[x]环境检查存在问题")
+			log.Println("[x]环境检查存在问题")
 			return
 		}
 		log.Println("[*]环境正常")
@@ -84,17 +84,15 @@ func main() {
 	if compile && sourceCode != "" && database != "" {
 		b := utils.CheckSourceCode(sourceCode)
 		if !b {
-			log.Fatalf("[x]环境检查失败%s", sourceCode)
+			log.Printf("[x]环境检查失败%s", sourceCode)
 			return
 		}
 		b2 := codeql.CreateDB(databaseql)
 		if !b2 {
-			log.Fatalf("[x]%s 源码编译阶段失败", sourceCode)
+			log.Printf("[x]%s 源码编译阶段失败", sourceCode)
 			return
 		}
 		log.Printf("[*]success 完成对%s 源码编译", sourceCode)
-	} else {
-		log.Fatalln("[x]没有指定源码位置或者编译后数据库存放的目录位置")
 	}
 
 }

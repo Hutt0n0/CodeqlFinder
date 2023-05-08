@@ -28,7 +28,7 @@ import (
 func readQlContent(path string) string {
 	bcontent, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Fatalln("读取ql文件失败")
+		log.Println("读取ql文件失败")
 		return ""
 	}
 	return string(bcontent)
@@ -53,7 +53,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 	if !b {
 		err2 := os.Mkdir(tempProject, 0777)
 		if err2 != nil {
-			log.Fatalln("工作区文件目录创建失败")
+			log.Println("工作区文件目录创建失败")
 			return false
 		}
 	}
@@ -61,7 +61,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 	if !tempB {
 		err2 := os.Mkdir(resultpath, 0777)
 		if err2 != nil {
-			log.Fatalln("结果存放目录创建失败")
+			log.Println("结果存放目录创建失败")
 			return false
 		}
 	}
@@ -92,7 +92,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 			if analyzeResult {
 				b, err3 := ioutil.ReadFile(csvFilePath)
 				if err3 != nil {
-					log.Fatalf("%s文件读取失败", csvFilePath)
+					log.Printf("%s文件读取失败", csvFilePath)
 				}
 				sresult := strings.Split(string(b), "\n")
 				vulnum := len(sresult) - 2
@@ -100,7 +100,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 				if vulnum == 0 {
 					err4 := os.Remove(csvFilePath)
 					if err4 != nil {
-						log.Fatalf("%s空文件删除失败", csvFilePath)
+						log.Printf("%s空文件删除失败", csvFilePath)
 					}
 				}
 			}
@@ -115,14 +115,14 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 			dirs, err = ioutil.ReadDir("plugins/StaticAnalize")
 			path = "plugins/StaticAnalize"
 			if err != nil {
-				log.Fatalln("读取plugins目录下文件失败")
+				log.Println("读取plugins目录下文件失败")
 				return false
 			}
 		} else {
 			dirs, err = ioutil.ReadDir("plugins/SourceToSink")
 			path = "plugins/SourceToSink"
 			if err != nil {
-				log.Fatalln("读取plugins目录下文件失败")
+				log.Println("读取plugins目录下文件失败")
 				return false
 			}
 		}
@@ -133,7 +133,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 			qlJavaPath := path + "/" + direname
 			javaDir, err2 := ioutil.ReadDir(qlJavaPath)
 			if err2 != nil {
-				log.Fatalf("读取plugins下的%s失败", direname)
+				log.Printf("读取plugins下的%s失败", direname)
 				return false
 			}
 			for _, entry2 := range javaDir {
@@ -158,7 +158,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 					if analyzeResult {
 						b, err3 := ioutil.ReadFile(csvFilePath)
 						if err3 != nil {
-							log.Fatalf("%s文件读取失败", csvFilePath)
+							log.Printf("%s文件读取失败", csvFilePath)
 						}
 						sresult := strings.Split(string(b), "\n")
 						vulnum := len(sresult) - 2
@@ -166,7 +166,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 						if vulnum == 0 {
 							err4 := os.Remove(csvFilePath)
 							if err4 != nil {
-								log.Fatalf("%s空文件删除失败", csvFilePath)
+								log.Printf("%s空文件删除失败", csvFilePath)
 							}
 						}
 					}

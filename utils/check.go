@@ -23,13 +23,13 @@ func CheckDatabase(database string) bool {
 	database = database + "/"
 	b := CheckFileExist(database)
 	if !b {
-		log.Fatalln("数据库文件不存在")
+		log.Println("数据库文件不存在")
 		return false
 	}
 	dbfile := database + "codeql-database.yml"
 	dbzip := database + "src.zip"
 	if !CheckFileExist(dbfile) || !CheckFileExist(dbzip) {
-		log.Fatalln("codeql-database.yml、src.zip其中一个文件不存在.")
+		log.Println("codeql-database.yml、src.zip其中一个文件不存在.")
 		return false
 	}
 	return true
@@ -50,11 +50,11 @@ func CheckCodeqlEnv() bool {
 	cmd = ExecCmd(params)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Fatalf("codeql combined err out:\n%s\n", string(out))
+		log.Printf("codeql combined err out:\n%s\n", string(out))
 		return false
 	}
 	if !strings.Contains(string(out), "release") {
-		log.Fatalln("codeql is not install or the codeql path is not in env path  ")
+		log.Println("codeql is not install or the codeql path is not in env path  ")
 		return false
 	}
 
@@ -77,11 +77,11 @@ func CheckMaven() bool {
 	cmd = exec.Command("mvn", params...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Fatalf("mvn combined err out:\n%s\n", string(out))
+		log.Printf("mvn combined err out:\n%s\n", string(out))
 		return false
 	}
 	if !strings.Contains(string(out), "Apache Maven") {
-		log.Fatalln("Maven is not install or the Maven is not in env path")
+		log.Println("Maven is not install or the Maven is not in env path")
 		return false
 	}
 	return true
@@ -100,14 +100,14 @@ func CheckQLPATH(database string, qlpath string) bool {
 	key := uuid1.String()
 	b2 := CheckFileExist(qlpath)
 	if !b2 {
-		log.Fatalln("qlpath is not exist ")
+		log.Println("qlpath is not exist ")
 		return false
 	}
 	helloTest := "import java\n\n select \"CheckISnormal\""
 	qlfile := qlpath + "/" + key + ".ql"
 	err2 := ioutil.WriteFile(qlfile, []byte(helloTest), 0777)
 	if err2 != nil {
-		log.Fatalln("create temp ql failed!! ")
+		log.Println("create temp ql failed!! ")
 		return false
 	}
 	var cmd *exec.Cmd
@@ -116,7 +116,7 @@ func CheckQLPATH(database string, qlpath string) bool {
 	cmd = ExecCmd(param)
 	b, err3 := cmd.CombinedOutput()
 	if err3 != nil {
-		log.Fatalln("'codeql query run -d ' failed ")
+		log.Println("'codeql query run -d ' failed ")
 		return false
 	}
 	if strings.Contains(string(b), "CheckISnormal") {
@@ -139,12 +139,12 @@ func CheckSourceCode(sourcepath string) bool {
 	pompath := sourcepath + "/" + "pom.xml"
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 	if !b {
-		log.Default().Fatalf("指定的源代码位置%s不存在", sourcepath)
+		log.Default().Printf("指定的源代码位置%s不存在", sourcepath)
 		return false
 	}
 	b2 := CheckFileExist(pompath)
 	if !b2 {
-		log.Default().Fatalf("指定的源代码的pom.xml%s不存在", pompath)
+		log.Default().Printf("指定的源代码的pom.xml%s不存在", pompath)
 		return false
 	}
 

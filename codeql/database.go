@@ -38,7 +38,7 @@ func Query(databaseql DatabaseCodeql, qlContent string, outfile string, temp str
 	queryPath := temp + "/" + s + ".ql"
 	err := ioutil.WriteFile(queryPath, []byte(qlContent), 0666)
 	if err != nil {
-		log.Fatalln("写入临时ql文件失败")
+		log.Println("写入临时ql文件失败")
 		return false
 	}
 	dmo := "query run -d " + databaseql.Database + " " + "-o " + outfile + " " + queryPath
@@ -46,7 +46,7 @@ func Query(databaseql DatabaseCodeql, qlContent string, outfile string, temp str
 	cmd := utils.ExecCmd(s2)
 	b, err2 := cmd.CombinedOutput()
 	if err2 != nil {
-		log.Fatalf("codeql query failed : %s", string(b))
+		log.Printf("codeql query failed : %s", string(b))
 		return false
 	}
 	return true
@@ -66,7 +66,7 @@ func Analyze(output string, format string, bqrspath string) bool {
 	cmd := utils.ExecCmd(params)
 	byteoutput, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Fatalf("结果解析错误:%s", string(byteoutput))
+		log.Printf("结果解析错误:%s", string(byteoutput))
 		return false
 	}
 	return true
@@ -79,7 +79,7 @@ func AnalyzeInstead(databaseql DatabaseCodeql, qlContent string, outfile string)
 	queryPath := databaseql.Qlpath + "/" + s + ".ql"
 	err := ioutil.WriteFile(queryPath, []byte(qlContent), 0666)
 	if err != nil {
-		log.Fatalln("写入临时ql文件失败")
+		log.Println("写入临时ql文件失败")
 		return false
 	}
 	var params []string
@@ -101,7 +101,7 @@ func CreateDB(databaseql DatabaseCodeql) bool {
 	params = append(append(append(append(append(append(append(append(append(append(append(params, "database"), "create"), databaseql.Database), "--language"), "java"), "--command"), databaseql.Cmd), "--source-root"), databaseql.Sourcecode), "--overwrite"))
 	b := utils.ReadTimeExecCmd(params)
 	if !b {
-		log.Fatalf("源码编译成数据库报错")
+		log.Printf("源码编译成数据库报错")
 		return false
 	}
 	return true
