@@ -1,16 +1,4 @@
-/**
- * @name SQL injection in MyBatis annotation
- * @description Constructing a dynamic SQL statement with input that comes from an
- *              untrusted source could allow an attacker to modify the statement's
- *              meaning or to execute arbitrary SQL commands.
- * @kind path-problem
- * @problem.severity error
- * @precision high
- * @id java/mybatis-annotation-sql-injection
- * @tags security
- *       experimental
- *       external/cwe/cwe-089
- */
+
 
 import java
 import MyBatisCommonLib

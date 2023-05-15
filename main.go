@@ -3,7 +3,7 @@
  * @version:
  * @Author: Hutt0n0
  * @Date: 2023-01-25 14:52:46
- * @LastEditTime: 2023-05-10 16:39:40
+ * @LastEditTime: 2023-05-10 17:25:58
  */
 package main
 
@@ -40,7 +40,6 @@ func main() {
 	flag.StringVar(&cmd, "cmd", "mvn clean package -DskipTests=true", "maven编译命令，默认是mvn clean package -DskipTests=true")
 	flag.BoolVar(&static, "static", false, "若只寻找sink点，需要加上-static 。默认为污点利用链分析")
 	flag.Parse()
-
 	if database == "" {
 		f := flag.Usage
 		f()
