@@ -1,16 +1,9 @@
-/*
- * @Descripttion:
- * @version:
- * @Author: Hutt0n0
- * @Date: 2023-01-25 17:38:53
- * @LastEditTime: 2023-04-27 19:03:53
- */
 package scan
 
 import (
 	"CodeqlFinder/codeql"
 	"CodeqlFinder/utils"
-	"fmt"
+	_ "embed"
 	"io/fs"
 	"io/ioutil"
 	"log"
@@ -45,10 +38,12 @@ func readQlContent(path string) string {
 func RunJava(databaseql codeql.DatabaseCodeql) bool {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 	path := "plugins"
+	dir, _ := os.Getwd()
+
 	var bqrsoutfile string
 	tempProject := databaseql.Qlpath + "/" + "tempProject" //工作区
 	bqrsoutfile = tempProject + "/" + "test.bqrs"
-	resultpath := tempProject + "/" + "codeqlResult"
+	resultpath := dir + "/" + "codeqlResult"
 	b := utils.CheckFileExist(tempProject)
 	if !b {
 		err2 := os.Mkdir(tempProject, 0777)
@@ -57,6 +52,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 			return false
 		}
 	}
+
 	tempB := utils.CheckFileExist(resultpath)
 	if !tempB {
 		err2 := os.Mkdir(resultpath, 0777)
@@ -74,7 +70,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 		s := ent.Name()
 		file := path + "/" + s
 		Content := readQlContent(file)
-		fmt.Println(Content)
+		// fmt.Println(Content)
 		err2 := ioutil.WriteFile(tempProject+"/"+s, ([]byte)(Content), 0777)
 		if err2 != nil {
 			log.Println("[x]lib文件创建失败")
@@ -147,7 +143,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 				// 	ioutil.WriteFile(tempProject+"/"+dirFileName, []byte(qlcontent), 0666)
 				// 	continue
 				// }
-				Scanresult := codeql.Query(databaseql, qlcontent, bqrsoutfile, tempProject)
+				Scanresult, queryPath := codeql.Query(databaseql, qlcontent, bqrsoutfile, tempProject)
 				if Scanresult {
 					num++
 					log.Printf("Finish：%s 完成%d个脚本", dirFileName, num)
@@ -165,8 +161,12 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 						log.Printf("%s 发现 %d 个漏洞", qlscriptPath, len(sresult)-2)
 						if vulnum == 0 {
 							err4 := os.Remove(csvFilePath)
+							err5 := os.Remove(queryPath)
 							if err4 != nil {
 								log.Printf("%s空文件删除失败", csvFilePath)
+							}
+							if err5 != nil {
+								log.Printf("%s文件删除失败", queryPath)
 							}
 						}
 					}

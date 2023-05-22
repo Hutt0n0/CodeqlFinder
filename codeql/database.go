@@ -31,7 +31,7 @@ type DatabaseCodeql struct {
  * @param {}
  * @return {}
  */
-func Query(databaseql DatabaseCodeql, qlContent string, outfile string, temp string) bool {
+func Query(databaseql DatabaseCodeql, qlContent string, outfile string, temp string) (bool, string) {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 	uuid1 := uuid.New()
 	s := uuid1.String()
@@ -47,9 +47,9 @@ func Query(databaseql DatabaseCodeql, qlContent string, outfile string, temp str
 	b, err2 := cmd.CombinedOutput()
 	if err2 != nil {
 		log.Printf("codeql query failed : %s", string(b))
-		return false
+		return false, queryPath
 	}
-	return true
+	return true, queryPath
 }
 
 /**
