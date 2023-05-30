@@ -80,7 +80,7 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 	if i > 0 {
 		//执行单文件
 		qlcontent := readQlContent(databaseql.Qlpath)
-		Scanresult := codeql.Query(databaseql, qlcontent, bqrsoutfile, tempProject)
+		Scanresult, queryPath := codeql.Query(databaseql, qlcontent, bqrsoutfile, tempProject)
 		if Scanresult {
 			newFileName := strings.Replace(databaseql.Qlpath, ".ql", ".csv", 1)
 			csvFilePath := resultpath + "/" + newFileName
@@ -98,6 +98,11 @@ func RunJava(databaseql codeql.DatabaseCodeql) bool {
 					if err4 != nil {
 						log.Printf("%s空文件删除失败", csvFilePath)
 					}
+
+				}
+				err2 := os.Remove(queryPath)
+				if err2 != nil {
+					log.Printf("%s文件删除失败", queryPath)
 				}
 			}
 		}

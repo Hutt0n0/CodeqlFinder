@@ -39,7 +39,7 @@ func Query(databaseql DatabaseCodeql, qlContent string, outfile string, temp str
 	err := ioutil.WriteFile(queryPath, []byte(qlContent), 0666)
 	if err != nil {
 		log.Println("写入临时ql文件失败")
-		return false
+		return false, ""
 	}
 	dmo := "query run -d " + databaseql.Database + " " + "-o " + outfile + " " + queryPath
 	s2 := strings.Split(dmo, " ")
